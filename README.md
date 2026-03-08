@@ -46,7 +46,3 @@ Collection variable `baseUrl` defaults to `http://localhost:8080`; change it if 
 - `DATABASE_URL` — PostgreSQL connection string. Use port **5433** when using Docker Compose (default host port); **5432** when using a local Postgres.
 - `MIGRATIONS_DIR` — Path to migrations directory (default: `migrations`; run from project root).
 - `WORKER_COUNT` — Number of worker goroutines (default: 3).
-
-## Docs
-
-See [docs/GOFLOW_BRIEF.md](docs/GOFLOW_BRIEF.md) for architecture, schema, and interview notes.
