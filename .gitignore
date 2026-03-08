@@ -1,0 +1,36 @@
+# Environment and secrets (do not commit)
+.env
+.env.local
+*.env
+
+# Built binary
+goflow
+/goflow
+
+# Go
+/vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+/coverage.out
+/coverage.html
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
+
+# Debug and temp
+*.log
+/tmp/
+.debug/

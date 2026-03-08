@@ -12,7 +12,13 @@ Distributed job processing system in Go: worker pool, retries with exponential b
 
    Wait until the postgres service is healthy (~5s). Optionally: `docker compose ps`.
 
-2. **Run the API** from the project root (migrations run on startup). Compose maps Postgres to **port 5433** so it doesn’t conflict with a local Postgres on 5432. Go does not load `.env` automatically—source it first, or export the variable:
+2. **Configure env** — `.env` is not committed. Copy the example and edit if needed:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Run the API** from the project root (migrations run on startup). Compose maps Postgres to **port 5433** so it doesn’t conflict with a local Postgres on 5432. Go does not load `.env` automatically—source it first:
 
    ```bash
    source .env && go run ./cmd/goflow
@@ -41,8 +47,18 @@ Collection variable `baseUrl` defaults to `http://localhost:8080`; change it if 
 - **GET /jobs/:id** — Job status and result.
 - **GET /metrics** — Counts and average processing time (JSON).
 
+## Tests
+
+```bash
+go test ./...
+```
+
 ## Config
 
 - `DATABASE_URL` — PostgreSQL connection string. Use port **5433** when using Docker Compose (default host port); **5432** when using a local Postgres.
 - `MIGRATIONS_DIR` — Path to migrations directory (default: `migrations`; run from project root).
 - `WORKER_COUNT` — Number of worker goroutines (default: 3).
+
+## Docs
+
+See [docs/GOFLOW_BRIEF.md](docs/GOFLOW_BRIEF.md) for architecture, schema, and design notes.
