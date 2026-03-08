@@ -1,0 +1,94 @@
+{
+  "info": {
+    "name": "GoFlow API",
+    "description": "GoFlow job queue API: health, create job, get job, metrics.",
+    "schema": "https://schema.postman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "jobId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health",
+        "description": "Liveness check. Returns 200 if app and DB are OK."
+      }
+    },
+    {
+      "name": "Create Job (report)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const id = pm.response.json().id;",
+              "  if (id) pm.collectionVariables.set('jobId', id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"report\",\n  \"payload\": { \"report_id\": \"r1\" },\n  \"priority\": 0\n}"
+        },
+        "url": "{{baseUrl}}/jobs",
+        "description": "Submit a report job. Saves jobId to collection variable for Get Job."
+      }
+    },
+    {
+      "name": "Create Job (heavy_task)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  const id = pm.response.json().id;",
+              "  if (id) pm.collectionVariables.set('jobId', id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"heavy_task\",\n  \"payload\": {},\n  \"priority\": 1\n}"
+        },
+        "url": "{{baseUrl}}/jobs",
+        "description": "Submit a heavy_task job (simulates longer work)."
+      }
+    },
+    {
+      "name": "Get Job by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/jobs/{{jobId}}",
+        "description": "Get job status and result. Use jobId from Create Job (or set jobId in collection variables)."
+      }
+    },
+    {
+      "name": "Get Metrics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/metrics",
+        "description": "Returns total_jobs, failed_jobs, completed_jobs, avg_processing_time_seconds, etc."
+      }
+    }
+  ]
+}
